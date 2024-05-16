@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIC GANTENG</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+        .shapeContainerWrapper {
+            width: 80%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow: hidden;
+        }
+        .shapeContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        .shapeControls {
+            display: flex;
+            gap: 10px;
+        }
+        .shape {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+        }
+        .circle {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="shapeContainerWrapper">
+    <div class="shapeContainer"></div>
+</div>
+<div class="controls">
+    <button id="addShape">Add Shape</button>
+    <button id="removeShape">Remove Shape</button>
+</div>
+<div class="shapeControls">
+    <label for="shapeType">Shape Type:</label>
+    <select id="shapeType">
+        <option value="circle">Circle</option>
+        <option value="square">Square</option>
+    </select>
+    <label for="shapeColor">Color:</label>
+    <input type="color" id="shapeColor" value="#ff0000">
+</div>
+
+<script>
+    $(document).ready(function () {
+        let isAnimating = false;
+
+        $('#addShape').click(async function () {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            const shapeType = $('#shapeType').val();
+            const shapeColor = $('#shapeColor').val();
+            const newShape = $('<div></div>').addClass('shape').addClass(shapeType).css('background-color', shapeColor).css('display', 'none');
+
+            $('.shapeContainer').append(newShape);
+            await newShape.slideDown('slow').promise();
+
+            isAnimating = false;
+        });
+
+        $('#removeShape').click(async function () {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            const lastShape = $('.shapeContainer .shape').last();
+            if (lastShape.length) {
+                await lastShape.fadeOut('slow').promise();
+                lastShape.remove();
+            }
+
+            isAnimating = false;
+        });
+    });
+</script>
+
+</body>
+</html>
